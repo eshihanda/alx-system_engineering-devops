@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Stop Apache if it's running
+pkill apache2
+
+# Create nginx user and group if they don't exist
+if ! id -u nginx &>/dev/null; then
+	useradd -r -s /sbin/nologin nginx
+fi
+
+# Change ownership of nginx configuration files to nginx user
+chown nginx:nginx /etc/nginx/nginx.conf
+chown -R nginx:nginx /etc/nginx/sites-available
+chown -R nginx:nginx /etc/nginx/sites-enabled
+
+# Change permissions of nginx configuration files
+chmod 640 /etc/nginx/nginx.conf
+chmod 640 /etc/nginx/sites-available/*
+chmod 640 /etc/nginx/sites-enabled/*
+
+# Replace port 80 with port 8080 in default nginx configuration
+sed -i 's/listen 80;/listen 8080;/g' /etc/nginx/sites-available/default
+
+# Restart nginx service
+service nginx restart
