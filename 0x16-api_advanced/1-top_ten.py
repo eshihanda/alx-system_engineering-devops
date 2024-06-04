@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """
 defines function to query the Reddit API for
@@ -23,4 +22,3 @@ def top_ten(subreddit):
     children = subreddit_info.get("data").get("children")
     for child in children:
         print(child.get("data").get("title"))
-
